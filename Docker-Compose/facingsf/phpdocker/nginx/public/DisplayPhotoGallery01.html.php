@@ -372,27 +372,43 @@ a:nth-child(n+7) .closed{
 /* ********************** */
 
 <?php
+
+    function get_creds(){
+        $creds = parse_ini_file('../php_sql_config.ini');
+        return $creds;
+    }
+
+   function get_sqli_connect($creds){
+        if(!isset($connection)){
+            $connection = mysqli_connect($creds['servername'], $creds['username'], $creds['password'], $creds['dbname']);
+        }
+        if($connection === false){
+            return mysqli_connect_error();
+        }
+        return $connection;
+   }
+
+
+   $config = get_creds();
+ 
+   $link = get_sqli_connect($config);
 	
-					//Connect and select db
-					$link = mysqli_connect("mysql", "root", "changeme", "wallfaces");
-					//mysql_select_db("wallfaces");
+   //Connect and select db
+   //$link = mysqli_connect("mysql", "phpfpm", "asdjI88387GHGsbyuXX9093", "wallfaces");
+   //mysql_select_db("wallfaces");
 					
-					$result = mysqli_query($link, "SELECT * FROM faceimages");
+   $result = mysqli_query($link, "SELECT * FROM faceimages");
 					
-					$total = mysqli_num_rows($result);
+   $total = mysqli_num_rows($result);
 					
-					for ($i=9; $i <= $total; $i=$i+2){
-					
-					    echo "a:nth-child(n+$i) .closed{ top: -236px; right: -236px;}";
-					    $i = $i + 2;
-					    echo "a:nth-child(n+$i) .closed{ top: -236px; right: -2px;}";
-					
-					}
+   for ($i=9; $i <= $total; $i=$i+2){					
+      echo "a:nth-child(n+$i) .closed{ top: -236px; right: -236px;}";
+      $i = $i + 2;
+      echo "a:nth-child(n+$i) .closed{ top: -236px; right: -2px;}";
+   }
 
-					mysqli_free_result($result);
-                                        mysqli_close($link);
-
-					
+   mysqli_free_result($result);
+   mysqli_close($link);					
 ?>					
 
 
@@ -725,52 +741,52 @@ a:active {}
 	<div class="gallery">
 	
 	<?php
-	
-					//Connect and select db
-					$link = mysqli_connect("mysql", "root", "changeme", "wallfaces");
-	
-					//Check for Paris then Run a query
-					if($_SESSION['City'] == "Paris, France"){
-						$result = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = '". $_SESSION['City']. "' && `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
-					}
-					
-					//Check for Southeast Asia
-					else if($_SESSION['City'] == "Southeast Asia"){
-					    //$result= mysql_query("SELECT * FROM faceimages WHERE `ImageLocation` = 'Bangkok, Thailand' OR `ImageLocation` = 'Chang Mai, Thailand' OR `ImageLocation` = 'Pantang, Malaysia' OR `ImageLocation` = 'Kula Lumpar, Malaysia' OR `ImageLocation` = 'Singapore, Singapore' ORDER BY `ImageDate` ASC");
-						$result= mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` LIKE '%Thailand' && `Notes`!='SIGNS and NOTES' OR `ImageLocation` LIKE '%Malaysia' && `Notes`!='SIGNS and NOTES' OR `ImageLocation` LIKE 'Singapore, Singapore'&& `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
-					   
-					}
-					
-					//Check for Central America
-					else if($_SESSION['City'] == "Central America"){
-						//$result= mysql_query("SELECT * FROM faceimages WHERE `ImageLocation` = 'San Juan Del Sur, Nicaragua' OR `ImageLocation` = 'Leon, Nicaragua' OR `ImageLocation` = 'Ensenada, Mexico' && `Notes`!='SIGNS and NOTES'");
-						$result= mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` LIKE '%Nicaragua' && `Notes`!='SIGNS and NOTES'  OR `ImageLocation` LIKE '%Mexico' && `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
+           //Get credentials
+           $config = get_creds();
 
-                    }	
+           //Connect and select db 
+           $link = get_sqli_connect($config);
 
-					//Check for Signs and Notes
-					else if($_SESSION['City'] == "Signs and Notes"){
-                        $result= mysqli_query($link, "SELECT * FROM faceimages WHERE `Notes` = 'SIGNS and NOTES' ORDER BY `ImageDate` DESC");
-                    }
+	
+	   //Check for Paris then Run a query
+	   if($_SESSION['City'] == "Paris, France"){
+	      $result = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = '". $_SESSION['City']. "' && `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
+	   }
+					
+	   //Check for Southeast Asia
+	   else if($_SESSION['City'] == "Southeast Asia"){
+	      //$result= mysql_query("SELECT * FROM faceimages WHERE `ImageLocation` = 'Bangkok, Thailand' OR `ImageLocation` = 'Chang Mai, Thailand' OR `ImageLocation` = 'Pantang, Malaysia' OR `ImageLocation` = 'Kula Lumpar, Malaysia' OR `ImageLocation` = 'Singapore, Singapore' ORDER BY `ImageDate` ASC");
+	     $result= mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` LIKE '%Thailand' && `Notes`!='SIGNS and NOTES' OR `ImageLocation` LIKE '%Malaysia' && `Notes`!='SIGNS and NOTES' OR `ImageLocation` LIKE 'Singapore, Singapore'&& `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
+	  }
+					
+	   //Check for Central America
+	   else if($_SESSION['City'] == "Central America"){
+	     //$result= mysql_query("SELECT * FROM faceimages WHERE `ImageLocation` = 'San Juan Del Sur, Nicaragua' OR `ImageLocation` = 'Leon, Nicaragua' OR `ImageLocation` = 'Ensenada, Mexico' && `Notes`!='SIGNS and NOTES'");
+             $result= mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` LIKE '%Nicaragua' && `Notes`!='SIGNS and NOTES'  OR `ImageLocation` LIKE '%Mexico' && `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
+           } 	
+
+           //Check for Signs and Notes
+	  else if($_SESSION['City'] == "Signs and Notes"){
+             $result= mysqli_query($link, "SELECT * FROM faceimages WHERE `Notes` = 'SIGNS and NOTES' ORDER BY `ImageDate` DESC");
+          }
                     				
-					else{
-						//$result = mysql_query("SELECT * FROM faceimages WHERE `ImageLocation` = '". $_SESSION['City']. "' && YEAR(`ImageDate`) = '". $_SESSION['Year']."' && `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
-					    $result = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = '". $_SESSION['City']. "' && YEAR(`ImageDate`) = '". $_SESSION['Year']."' && `Notes`!='SIGNS and NOTES' OR `ImageLocation`= 'Oakland, CA' && YEAR(`ImageDate`) = '". $_SESSION['Year']."'&& `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
-
-					}
+	  else{
+	    //$result = mysql_query("SELECT * FROM faceimages WHERE `ImageLocation` = '". $_SESSION['City']. "' && YEAR(`ImageDate`) = '". $_SESSION['Year']."' && `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
+	    $result = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = '". $_SESSION['City']. "' && YEAR(`ImageDate`) = '". $_SESSION['Year']."' && `Notes`!='SIGNS and NOTES' OR `ImageLocation`= 'Oakland, CA' && YEAR(`ImageDate`) = '". $_SESSION['Year']."'&& `Notes`!='SIGNS and NOTES' ORDER BY `ImageDate` DESC");
+          }
 					
-					while ($row = mysqli_fetch_array($result)){
+	  while ($row = mysqli_fetch_array($result)){
 					
-						echo "<a tabindex=\"1\"><img src=\"". $row["FileLocation"] . $row["FileName"]. $row["FileType"]. "\"><div class=\"closed\">+</div>";
-							echo "<div id=\"container\">date: " . $row["ImageDate"] ."<br>name: ". $row["ImageName"]. "<br> location: ". $row["ImageLocation"]. "</div>";
-						echo "</a>";
+	    echo "<a tabindex=\"1\"><img src=\"". $row["FileLocation"] . $row["FileName"]. $row["FileType"]. "\"><div class=\"closed\">+</div>";
+	    echo "<div id=\"container\">date: " . $row["ImageDate"] ."<br>name: ". $row["ImageName"]. "<br> location: ". $row["ImageLocation"]. "</div>";
+	    echo "</a>";
 
-					}	
+	  } 	
 				
 					
-					mysqli_free_result($result);
-                                        mysqli_close($link);
-?>
+	  mysqli_free_result($result);
+          mysqli_close($link);
+        ?>
 	    
 	</div>	<!-- gallery -->
 
