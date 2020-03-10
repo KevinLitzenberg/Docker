@@ -1059,6 +1059,22 @@ a:active {}
 </head>
 
 <title>www.facingsf.com:home</title><!-- index2005_added.html.php --><!--FSF_PhotoStack_url_varibles02.html.php -->
+<?php
+    function get_creds(){
+        $creds = parse_ini_file('../php_sql_config.ini');
+        return $creds;
+    }
+
+   function get_sqli_connect($creds){
+        if(!isset($connection)){
+            $connection = mysqli_connect($creds['servername'], $creds['username'], $creds['password'], $creds['dbname']);
+        }
+        if($connection === false){
+            return mysqli_connect_error();
+        }
+        return $connection;
+   }
+?>
 
 <body>
 
@@ -1161,96 +1177,100 @@ a:active {}
     <!-- <div id="text">Google+ Stack Effect</div> -->
     <!--Loads the element that will finally hold the row of three -->
 
-        <div id="image_stack01">
-			    <a href=DisplayPhotoGallery01.html.php?City=SanFran&Year=2012>
-				
-				<?php
-					//Connect and select db
-					$link = mysqli_connect("mysql", "root", "change_me", "wallfaces");
-	
-					//Run a query
-					$resultSF = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'San Francisco, CA' AND YEAR(`ImageDate`)= '2012' AND `Notes` = 'splash' AND `Notes` != 'SIGNS and NOTES' ORDER BY `ImageDate` DESC LIMIT 3");
-					
+           <div id="image_stack01">
+               <a href=DisplayPhotoGallery01.html.php?City=SanFran&Year=2012>
+	          <?php
+                     //Get credentials
+                     $config = get_creds();
+ 
+		     //Connect and select db 
+                     $link = get_sqli_connect($config);
+                     //$link = mysqli_connect('mysql', 'phpfpm', 'asdjI88387GHGsbyuXX9093j', 'wallfaces');
 
-					//Photo1
-					$row = mysqli_fetch_row($resultSF);
-			        echo "<img id=\"photo1\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Run a queryi 
+		     $resultSF = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'San Francisco, CA' AND YEAR(`ImageDate`)= '2012' AND `Notes` = 'splash' AND `Notes` != 'SIGNS and NOTES' ORDER BY `ImageDate` DESC LIMIT 3");			
+
+		     //Photo1
+		     $row = mysqli_fetch_row($resultSF);
+		     echo "<img id=\"photo1\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 					
-					//Photo2
-					$row = mysqli_fetch_row($resultSF);
-			        echo "<img id=\"photo2\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo2
+		     $row = mysqli_fetch_row($resultSF);
+	             echo "<img id=\"photo2\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 				
-				    //Photo3
-					$row = mysqli_fetch_row($resultSF);
-			        echo "<img id=\"photo3\"  src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo3
+		     $row = mysqli_fetch_row($resultSF);
+	             echo "<img id=\"photo3\"  src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 					
-					#php7.0 free the result
-					mysqli_free_result($resultSF);
-					mysqli_close($link);
-				?>	
+		     //php7.0 free the result
+		     mysqli_free_result($resultSF);
+		     mysqli_close($link);
+		?>
 									
 		</a>
-        </div>
+          </div>
 		
-		<div id="image_stack02">
-			<a href=DisplayPhotoGallery01.html.php?City=SanFran&Year=2011>
-				
-				<?php
-					//Connect and select db
-					$link = mysqli_connect("mysql", "root", "change_me", "wallfaces");
+	   <div id="image_stack02">
+	       <a href=DisplayPhotoGallery01.html.php?City=SanFran&Year=2011>
+	          <?php
+                     //Get credentials
+                     $config = get_creds();
 
-					//Run a query
-					$resultSF = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'San Francisco, CA' AND YEAR(`ImageDate`)= '2011' AND `Notes`='splash' ORDER BY `ImageDate` DESC LIMIT 3");
+                     //Connect and select db 
+                     $link = get_sqli_connect($config);
 
-					//Photo1
-					$row = mysqli_fetch_row($resultSF);
-			        echo "<img id=\"photo4\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+	             //Run a query
+	             $resultSF = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'San Francisco, CA' AND YEAR(`ImageDate`)= '2011' AND `Notes`='splash' ORDER BY `ImageDate` DESC LIMIT 3");
+
+		     //Photo1
+		     $row = mysqli_fetch_row($resultSF);
+	             echo "<img id=\"photo4\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 					
-					//Photo2
-					$row = mysqli_fetch_row($resultSF);
-			        echo "<img id=\"photo5\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo2
+		     $row = mysqli_fetch_row($resultSF);
+	             echo "<img id=\"photo5\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 				
-				    //Photo3
-					$row = mysqli_fetch_row($resultSF);
-			        echo "<img id=\"photo6\"  src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo3
+		     $row = mysqli_fetch_row($resultSF);
+	             echo "<img id=\"photo6\"  src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 				
-
-					#php7.0 free the result
-                                        mysqli_free_result($resultSF);
-					mysqli_close($link);	
-				?>	
-			</a>							
-		</div>
+	             //php7.0 free the result
+                     mysqli_free_result($resultSF);
+	             mysqli_close($link);	
+		  ?>
+	      </a>							
+	  </div>
 		    
-        <div id="image_stack03">
-		<a href=DisplayPhotoGallery01.html.php?City=SanFran&Year=2010>
-		    <?php
-				//Connect and select db
-				$link = mysqli_connect("mysql", "root", "change_me", "wallfaces");
-	
-				//Run a query
-				$resultSF = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'San Francisco, CA' AND YEAR(`ImageDate`)= '2010' AND `Notes`='splash' ORDER BY `ImageDate` DESC LIMIT 3");
-					
-				//Photo1
-				$row = mysqli_fetch_row($resultSF);
-		        echo "<img id=\"photo7\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
-					
-				//Photo2
-				$row = mysqli_fetch_row($resultSF);
-		        echo "<img id=\"photo8\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
-				
-			    //Photo3
-				$row = mysqli_fetch_row($resultSF);
-			    echo "<img id=\"photo9\"  src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
-				
-				#php7.0 free the result
-                                mysqli_free_result($resultSF);
-				mysqli_close($link);	
-			?>	
+          <div id="image_stack03">
+	      <a href=DisplayPhotoGallery01.html.php?City=SanFran&Year=2010>
+		 <?php
+                    //Get credentials
+                    $config = get_creds();
 
-			</a>
-		
-		</div>
+                    //Connect and select db 
+                    $link = get_sqli_connect($config);
+	
+		    //Run a query
+	            $resultSF = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'San Francisco, CA' AND YEAR(`ImageDate`)= '2010' AND `Notes`='splash' ORDER BY `ImageDate` DESC LIMIT 3");
+					
+	            //Photo1
+	            $row = mysqli_fetch_row($resultSF);
+		    echo "<img id=\"photo7\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+					
+	            //Photo2
+	            $row = mysqli_fetch_row($resultSF);
+		    echo "<img id=\"photo8\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+				
+	            //Photo3
+	            $row = mysqli_fetch_row($resultSF);
+		    echo "<img id=\"photo9\"  src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+				
+	            //php7.0 free the result
+                    mysqli_free_result($resultSF);
+		    mysqli_close($link);	
+		?>
+	      </a>	
+	  </div>
             
 
 	
@@ -1271,90 +1291,99 @@ a:active {}
 		        Year: 2010
 		    </div>
 		
-	    </div><!--stack_caption-->
+	   </div><!--stack_caption-->
 	    
-	    <div id="image_stack04">
-	        <a href=DisplayPhotoGallery01.html.php?City=LosAngeles&Year=2010>
-			    <?php
-					//Connect and select db
-					$link = mysqli_connect("mysql", "root", "change_me", "wallfaces");
+	   <div id="image_stack04">
+	       <a href=DisplayPhotoGallery01.html.php?City=LosAngeles&Year=2010>
+                  <?php
+                     //Get credentials
+                     $config = get_creds();
 
-					//Run a query
-				   $resultLA = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'Los Angeles, CA' AND YEAR(`ImageDate`)= '2010' AND `Notes`='splash' ORDER BY `ImageDate` ASC LIMIT 3");
+                     //Connect and select db 
+                     $link = get_sqli_connect($config);
 
-					//Photo1
-					$row = mysqli_fetch_row($resultLA);
-			        echo "<img id=\"photo10\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+	             //Run a query
+		     $resultLA = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'Los Angeles, CA' AND YEAR(`ImageDate`)= '2010' AND `Notes`='splash' ORDER BY `ImageDate` ASC LIMIT 3");
+
+		     //Photo1
+		     $row = mysqli_fetch_row($resultLA);
+		     echo "<img id=\"photo10\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 					
-					//Photo2
-					$row = mysqli_fetch_row($resultLA);
-			        echo "<img id=\"photo11\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo2
+		     $row = mysqli_fetch_row($resultLA);
+		     echo "<img id=\"photo11\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 				
-				    //Photo3
-					$row = mysqli_fetch_row($resultLA);
-			        echo "<img id=\"photo12\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo3
+		     $row = mysqli_fetch_row($resultLA);
+		     echo "<img id=\"photo12\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 			
-					#php7.0 free the result
-                                        mysqli_free_result($resultLA);
-					mysqli_close($link);	
-				?>	
+		     //php7.0 free the result
+                     mysqli_free_result($resultLA);
+		     mysqli_close($link);	
+		  ?>
 		</a>		
-        </div>
+           </div>
         
         
-        <div id="image_stack05">
-            <a href=DisplayPhotoGallery01.html.php?City=NewYork&Year=2010>
-			    <?php
-					//Connect and select db
-					$link = mysqli_connect("mysql", "root", "change_me", "wallfaces");
+           <div id="image_stack05">
+               <a href=DisplayPhotoGallery01.html.php?City=NewYork&Year=2010>
+	          <?php
+	             //Get credentials
+                     $config = get_creds();
 
-					//Run a query
-					$resultNY = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'New York, NY' AND YEAR(`ImageDate`)= '2010' AND `Notes`='splash' ORDER BY `ImageDate` ASC LIMIT 3");
+                     //Connect and select db 
+                     $link = get_sqli_connect($config);
+
+	             //Run a query
+		     $resultNY = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'New York, NY' AND YEAR(`ImageDate`)= '2010' AND `Notes`='splash' ORDER BY `ImageDate` ASC LIMIT 3");
 					
-					//Photo1
-					$row = mysqli_fetch_row($resultNY);
-			        echo "<img id=\"photo13\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo1
+		     $row = mysqli_fetch_row($resultNY);
+	             echo "<img id=\"photo13\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 					
-					//Photo2
-					$row = mysqli_fetch_row($resultNY);
-			        echo "<img id=\"photo14\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo2
+		     $row = mysqli_fetch_row($resultNY);
+		     echo "<img id=\"photo14\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 				
-				    //Photo3
-					$row = mysqli_fetch_row($resultNY);
-			        echo "<img id=\"photo15\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo3
+		     $row = mysqli_fetch_row($resultNY);
+		     echo "<img id=\"photo15\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 			
-					#php7.0 free the result
-                                        mysqli_free_result($resultNY);
-					mysqli_close($link);	
-				?>	
+		     //php7.0 free the result
+                     mysqli_free_result($resultNY);
+	             mysqli_close($link);	
+		  ?>
 		</a>		
-        </div>
+            </div>
 
-        <div id="image_stack06">
-            <a href=DisplayPhotoGallery01.html.php?City=SoutheastAsia&Year=2008>
-			    <?php
-					//Connect and select db
-					$link = mysqli_connect("mysql", "root", "change_me", "wallfaces");
+           <div id="image_stack06">
+               <a href=DisplayPhotoGallery01.html.php?City=SoutheastAsia&Year=2008>
+	          <?php
+	             //Get credentials
+                     $config = get_creds();
 
-					//Run a query
-					$resultSEastAsia = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'Bangkok, Thailand' AND `Notes`='splash' OR `ImageLocation` = 'Chang Mai, Thailand' AND `Notes`='splash' OR `ImageLocation` = 'Pantang, Malaysia' AND `Notes`='splash' OR `ImageLocation` = 'Kula Lumpar, Malaysia' AND `Notes`='splash' OR `ImageLocation` = 'Singapore, Singapore' AND `Notes`='splash' ORDER BY `ImageDate` DESC LIMIT 3");
+                     //Connect and select db 
+                     $link = get_sqli_connect($config);
+
+		     //Run a query
+		     $resultSEastAsia = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'Bangkok, Thailand' AND `Notes`='splash' OR `ImageLocation` = 'Chang Mai, Thailand' AND `Notes`='splash' OR `ImageLocation` = 'Pantang, Malaysia' AND `Notes`='splash' OR `ImageLocation` = 'Kula Lumpar, Malaysia' AND `Notes`='splash' OR `ImageLocation` = 'Singapore, Singapore' AND `Notes`='splash' ORDER BY `ImageDate` DESC LIMIT 3");
 					
-					//Photo1
-					$row = mysqli_fetch_row($resultSEastAsia);
-			        echo "<img id=\"photo16\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo1
+		     $row = mysqli_fetch_row($resultSEastAsia);
+	             echo "<img id=\"photo16\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 					
-					//Photo2
-					$row = mysqli_fetch_row($resultSEastAsia);
-			        echo "<img id=\"photo17\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo2
+		     $row = mysqli_fetch_row($resultSEastAsia);
+	             echo "<img id=\"photo17\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 				
-				    //Photo3
-					$row = mysqli_fetch_row($resultSEastAsia);
-			        echo "<img id=\"photo18\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+	             //Photo3
+		     $row = mysqli_fetch_row($resultSEastAsia);
+	             echo "<img id=\"photo18\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 			
-					#php7.0 free the result
-                                        mysqli_free_result($resultSEastAsia);
-					mysqli_close($link);	
-				?>	
+		     //php7.0 free the result
+                     mysqli_free_result($resultSEastAsia);
+	             mysqli_close($link);	
+		   ?>
 		</a>		
         </div>
         
@@ -1377,92 +1406,99 @@ a:active {}
 		    </div>
 		</div> <!--stack_caption_bottom -->	
 	 
-	 <div id="image_stack07">
-			    <a href=DisplayPhotoGallery01.html.php?City=CentralAmerica&Year=2010>
-				
-				<?php
-					//Connect and select db
-					$link = mysqli_connect("mysql", "root", "change_me", "wallfaces");
-	
-					//Run a query
-                    			$resultCTA = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` LIKE '%Nicaragua' AND `Notes`='splash' AND `Notes` != 'SIGNS and NOTES' OR`ImageLocation` LIKE '%Mexico'AND `Notes`='splash' AND `Notes` != 'SIGNS and NOTES' ORDER BY `ImageDate` ASC LIMIT 3");
+	   <div id="image_stack07">
+	       <a href=DisplayPhotoGallery01.html.php?City=CentralAmerica&Year=2010>	
+	          <?php
+                     //Get credentials
+                     $config = get_creds();
 
-					//Photo1
-					$row = mysqli_fetch_row($resultCTA);
-			        echo "<img id=\"photo19\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+                     //Connect and select db 
+                     $link = get_sqli_connect($config);
+	
+		     //Run a query
+                     $resultCTA = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` LIKE '%Nicaragua' AND `Notes`='splash' AND `Notes` != 'SIGNS and NOTES' OR`ImageLocation` LIKE '%Mexico'AND `Notes`='splash' AND `Notes` != 'SIGNS and NOTES' ORDER BY `ImageDate` ASC LIMIT 3");
+
+		     //Photo1
+		     $row = mysqli_fetch_row($resultCTA);
+	             echo "<img id=\"photo19\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 					
-					//Photo2
-					$row = mysqli_fetch_row($resultCTA);
-			        echo "<img id=\"photo20\"  class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo2
+		     $row = mysqli_fetch_row($resultCTA);
+	             echo "<img id=\"photo20\"  class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 				
-				    //Photo3
-					$row = mysqli_fetch_row($resultCTA);
-			        echo "<img id=\"photo21\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo3
+		     $row = mysqli_fetch_row($resultCTA);
+	             echo "<img id=\"photo21\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 			
-					 #php7.0 free the result
-                                        mysqli_free_result($resultCTA);
-					mysqli_close($link);	
-				?>	
+		     //php7.0 free the result
+                     mysqli_free_result($resultCTA);
+	             mysqli_close($link);	
+		   ?>
 									
 		</a>
-        </div>
+           </div>
 		
-		<div id="image_stack08">
-			<a href=DisplayPhotoGallery01.html.php?City=BarcelonaSpain&Year=2006>
-			    <?php
-					//Connect and select db
-					$link = mysqli_connect("mysql", "root", "change_me", "wallfaces");
+	   <div id="image_stack08">
+	       <a href=DisplayPhotoGallery01.html.php?City=BarcelonaSpain&Year=2006>
+	          <?php
+		     //Get credentials
+                     $config = get_creds();
 
-					//Run a query
-					$resultSpain = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'Barcelona, Spain' AND `Notes`='splash' ORDER BY `ImageDate` DESC LIMIT 3");
+                     //Connect and select db 
+                     $link = get_sqli_connect($config);
 
-					//Photo1
-					$row = mysqli_fetch_row($resultSpain);
-			        echo "<img id=\"photo22\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Run a query
+		     $resultSpain = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'Barcelona, Spain' AND `Notes`='splash' ORDER BY `ImageDate` DESC LIMIT 3");
+		     //Photo1
+		     $row = mysqli_fetch_row($resultSpain);
+	             echo "<img id=\"photo22\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 					
-					//Photo2
-					$row = mysqli_fetch_row($resultSpain);
-			        echo "<img id=\"photo23\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo2
+		     $row = mysqli_fetch_row($resultSpain);
+		     echo "<img id=\"photo23\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 				
-				    //Photo3
-					$row = mysqli_fetch_row($resultSpain);
-			        echo "<img id=\"photo24\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+		     //Photo3
+		     $row = mysqli_fetch_row($resultSpain);
+	             echo "<img id=\"photo24\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
 			
-					#php7.0 free the result
-                                        mysqli_free_result($resultSpain);
-					mysqli_close($link);	
-				?>	
+		     //php7.0 free the result
+                     mysqli_free_result($resultSpain);
+		     mysqli_close($link);	
+	           ?>
 		</a>		
-		</div>
+	   </div>
 		    
-        <div id="image_stack09">
-	        <a href=DisplayPhotoGallery01.html.php?City=ParisFrance&Year=2005-2006>
-		    <?php
-				//Connect and select db
-				$link = mysqli_connect("mysql", "root", "change_me", "wallfaces");
-	
-				//Run a query
-				$resultFrance = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'Paris, France' LIMIT 3");
-					
-				//Photo1
-				$row = mysqli_fetch_row($resultFrance);
-		        echo "<img id=\"photo25\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
-					
-				//Photo2
-				$row = mysqli_fetch_row($resultFrance);
-		        echo "<img id=\"photo26\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
-				
-			    //Photo3
-				$row = mysqli_fetch_row($resultFrance);
-			    echo "<img id=\"photo27\"  src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
-			
-				#php7.0 free the result
-                                mysqli_free_result($resultFrance);
-				mysqli_close($link);	
-			?>	
+           <div id="image_stack09">
+	       <a href=DisplayPhotoGallery01.html.php?City=ParisFrance&Year=2005-2006>
+		  <?php
+                     //Get credentials
+                     $config = get_creds();
 
-			</a>
-		</div>
+                     //Connect and select db 
+                     $link = get_sqli_connect($config);
+	
+		     //Run a query
+		     $resultFrance = mysqli_query($link, "SELECT * FROM faceimages WHERE `ImageLocation` = 'Paris, France' LIMIT 3");
+					
+		     //Photo1
+		     $row = mysqli_fetch_row($resultFrance);
+		     echo "<img id=\"photo25\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+					
+		     //Photo2
+		     $row = mysqli_fetch_row($resultFrance);
+		     echo "<img id=\"photo26\" class=\"current\" src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+				
+		     //Photo3
+		     $row = mysqli_fetch_row($resultFrance);
+		     echo "<img id=\"photo27\"  src=\"" .$row[2]/*FileLocation*/ .$row[1]/*FileName*/ .$row[10]/*FileType*/ ."\" >";
+			
+		     //php7.0 free the result
+                     mysqli_free_result($resultFrance);
+		     mysqli_close($link);	
+		  ?>
+
+		</a>
+	   </div>
 		
 		 <div id="stack_caption_mid02">
 	    
